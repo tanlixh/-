@@ -15,6 +15,8 @@
   <script src="./libs/jquery-1.12.4.min.js"></script>
   <!-- 引入bootstrap的js文件 -->
   <script src="./libs/bootstrap/js/bootstrap.min.js"></script>
+  <!-- 引入封装url文件 -->
+  <script src="./libs/http.js"></script>
 </head>
 
 <body>
@@ -38,6 +40,75 @@
     </div>
   </div>
 
+<!-- 模态框 -->
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">提示:</h4>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">确定</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
 </body>
+<script>        
+//为登录按钮注册获取用户输入进行ajax请求事件
+$('.input_sub').click(function(e){
+   e.preventDefault();
+  //获取用户输入
+  var username=$('.input_txt').val().trim();
+  var password=$('.input_pass').val().trim();
+  //非空判断
+  if(username==""||password==""){
+    // alert('账号或密码不能为空');
+
+    $('.modal-body').text('账号或密码不能为空');
+    $('#myModal').modal();//调出模态框
+    return;        
+  }
+  //发送ajax请求
+  $.ajax({
+    url:BigNew.user_login,
+    type:'post',
+    data:{
+      username:username,
+      password:password
+    },
+    success:function(backData){
+       if (backData.code==200) {
+        //  alert('登录成功!');
+
+        $('.modal-body').text(backData.msg);//修改模态框内容
+        $('#myModal').modal();//调出模态框
+        
+        localStorage.setItem('token',backData.token);//将token令牌存入本地localstorage
+
+        //当模态框被隐藏后触发
+        $('#myModal').on('hidden.bs.modal', function (e) {
+          window.location.href="./index.html";
+        })        
+       } else {
+        //  alert('登录失败!')
+
+        $('.modal-body').text(backData.msg);//修改模态框内容
+        $('#myModal').modal();//调出模态框
+       }
+    }
+  })
+})
+
+
+</script>
 
 </html>

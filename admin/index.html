@@ -13,6 +13,7 @@
     <script src="./libs/jquery-1.12.4.min.js"></script>
     <!-- 导入bootstrap的js文件 -->
     <script src="./libs/bootstrap/js/bootstrap.min.js"></script>
+    <script src="./libs/http.js"></script>
 </head>
 
 <body>
@@ -47,12 +48,37 @@
                 <a href="./user.html" target="main_frame">个人中心</a>
                 <img src="images/2.jpg" alt="person">
                 <a href="javascript:void(0)" class="logout"><i class="iconfont icon-tuichu"></i> 退出</a>
-            </div>
+            </div> 
         </div>
         <!-- 右侧主体内容 -->
         <div class="main" id="main_body">
 
         </div>
     </div>
+    <script>
+    $(function(){
+
+        //页面加载时携带请求头向服务器发送请求获得用户信息
+        $.ajax({
+            url:BigNew.user_info,
+            type:'get',
+            success:function(backData){
+                console.log(backData);    
+                $('.user_info').children('span').html('欢迎&nbsp;&nbsp;'+backData.data.nickname);
+                $('.user_info').children('img').attr('src',backData.data.userPic);
+                $('.user_center_link').children('img').attr('src',backData.data.userPic);
+            }
+        }),
+        //点击退出按钮,清除token令牌返回登录页面
+        $('.logout').click(function(e){
+            e.preventDefault();
+            alert('退出成功!')
+            localStorage.removeItem('token');
+            location.href='./login.html';
+        })
+    })
+    
+    
+    </script>
 </body>
 </html>
