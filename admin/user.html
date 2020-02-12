@@ -11,6 +11,8 @@
     <link rel="stylesheet" href="css/iconfont.css">
     <link rel="stylesheet" href="css/main.css">
     <script src="./libs/jquery-1.12.4.min.js"></script>
+    <!-- 引入接口文件 -->
+    <script src="./libs/http.js"></script>
 
 </head>
 
@@ -62,12 +64,69 @@
                 </div>
                 <div class="form-group">
                     <div class="col-sm-offset-2 col-sm-10">
-                        <button type="submit" class="btn btn-success btn-edit">修改</button>
+                        <button type="submit" class="btn btn-success btn-edit xiu">修改</button>
                     </div>
                 </div>
             </form>
         </div>
     </div>
 </body>
+<script>
+//进入页面,发送ajax请求获得用户数据初始化表单
+$(function(){
+    $.ajax({
+        type:'get',
+        url:BigNew.user_detail,
+        success:function(backData){
+             console.log(backData);
+             $('#inputEmail1').val(backData.data.username);
+             $('#inputEmail2').val(backData.data.nickname);
+             $('#inputEmail3').val(backData.data.email);
+             $('#exampleInputFile').prev('img').attr('src',backData.data.userPic);
+             $('#inputEmail4').val(backData.data.password);
 
+        }
+    })
+})
+
+//图片预览(
+$('#exampleInputFile').on('change',function(){
+    //获取所选文件
+    var f1=this.files[0];
+    //创建路径
+    var ur=URL.createObjectURL(f1);
+    //展示图片
+    $('#exampleInputFile').prev('img').attr('src',ur);
+})
+
+
+//注册修改事件
+$('.xiu').on('click',function(e){
+    e.preventDefault();
+    //获取form
+    var ff=document.getElementById('form');
+    var fd=new FormData(ff);
+    //发送ajax请求更改
+    $.ajax({
+        type:'post',
+        url:BigNew.user_edit,
+        data:fd,
+        contentType:false,//不要请求头
+        processData:false,//不要把fd转成字符串
+        success:function(backData){
+            console.log(backData); 
+            if (backData.code==200) {
+                alert('修改成功!');
+                 window.parent.location.href='./index.html';
+            }else {
+                alert('修改失败!'+backData.msg);
+            }           
+        }
+    })
+})
+
+
+
+
+</script>
 </html>

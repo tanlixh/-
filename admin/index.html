@@ -70,17 +70,17 @@ $(function(){
 })
 })
 
-   //注册用户登出事件
+//注册用户登出事件
 $('.logout').click(function(){
     localStorage.removeItem('token');
     window.location.href='./login.html';
 })
    
 
-
 //一级菜单点击事件
 $('.level01').on('click',function(){
     $(this).addClass('active').siblings().removeClass('active');
+    
     //当点击为含二级菜单的'文章管理'时
     if ($(this).next().hasClass('level02')) {
         //展开ul
@@ -89,12 +89,15 @@ $('.level01').on('click',function(){
         $('.level02>li:eq(0)>a')[0].click();    
         //箭头动画(
         $(this).find('b').toggleClass('rotate0');
-     }else {
+     }
+     else {
         $('.level02>li').removeClass('active');
      }
 })
-   //二级菜单点击事件
-   $('.level02>li').on('click',function(){
+   
+
+//二级菜单点击事件
+$('.level02>li').on('click',function(){
        $(this).addClass('active').siblings().removeClass('active');
        $('.level01').removeClass('active');
        $(this).parent().prev().addClass('active');
