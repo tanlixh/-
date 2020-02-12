@@ -117,7 +117,8 @@ $('.xiu').on('click',function(e){
             console.log(backData); 
             if (backData.code==200) {
                 alert('修改成功!');
-                 window.parent.location.href='./index.html';
+                 parent.window.location.href='./index.html';//回到父级再重新进入index页面
+                //  parent.window.location.reload();//会报跨域的错
             }else {
                 alert('修改失败!'+backData.msg);
             }           
