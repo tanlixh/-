@@ -62,53 +62,51 @@
 
 
 </body>
-<script>        
-//为登录按钮注册获取用户输入进行ajax请求事件
+<script>
+//点击登录,获取用户输入进行ajax请求
 $('.input_sub').click(function(e){
    e.preventDefault();
-  //获取用户输入
-  var username=$('.input_txt').val().trim();
-  var password=$('.input_pass').val().trim();
-  //非空判断
-  if(username==""||password==""){
-    // alert('账号或密码不能为空');
+   //获取用户输入
+   var username=$('.input_txt').val().trim();
+   var password=$('.input_pass').val().trim();
+   //进行非空判断
+   if (username==""||password=="") {
+      // alert('用户名和密码不能为空!');
 
-    $('.modal-body').text('账号或密码不能为空');
-    $('#myModal').modal();//调出模态框
-    return;        
-  }
-  //发送ajax请求
-  $.ajax({
-    url:BigNew.user_login,
-    type:'post',
-    data:{
-      username:username,
-      password:password
-    },
-    success:function(backData){
-       if (backData.code==200) {
-        //  alert('登录成功!');
+      $('.modal-body').text('用户名和密码不能为空!');
+      $('#myModal').modal();
 
-        $('.modal-body').text(backData.msg);//修改模态框内容
-        $('#myModal').modal();//调出模态框
-        
-        localStorage.setItem('token',backData.token);//将token令牌存入本地localstorage
+      return;
+   }
+   //发送ajax请求
+   $.ajax({
+     url:BigNew.user_login,
+     type:'post',
+     data:{
+       username:username,
+       password:password
+     },
+     success:function(backdata){
+        if (backdata.code==200) {
+          // alert('登录成功');
 
-        //当模态框被隐藏后触发
-        $('#myModal').on('hidden.bs.modal', function (e) {
-          window.location.href="./index.html";
-        })        
-       } else {
-        //  alert('登录失败!')
+          $('.modal-body').text('登录成功!');
+          $('#myModal').modal();
 
-        $('.modal-body').text(backData.msg);//修改模态框内容
-        $('#myModal').modal();//调出模态框
-       }
-    }
-  })
+          $('#myModal').on('hidden.bs.modal',function(e){
+            window.location.href='./index.html';
+            localStorage.setItem('token',backdata.token);
+          })
+        } else {
+          // alert('登录失败!!')
+
+          $('.modal-body').text('登录失败!');
+          $('#myModal').modal();
+        }
+     }
+  
+   })
 })
-
-
 </script>
 
 </html>
